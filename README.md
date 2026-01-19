@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🗓️ Online Appointment & Service Management System
 
 ## 📌 Project Overview
@@ -77,3 +78,6 @@ This system provides a **digital solution** for booking, approving, and managing
 ```bash
 git clone <repository-url>
 cd appointment_system
+=======
+# EMT_Appointment_Booking
+>>>>>>> aa6baefb8b2700456ac89968ba078c77bc1ee23d
