@@ -1,0 +1,151 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+    <div class="sidebar-header">
+        <h3>Hospital Dashboard</h3>
+    </div>
+
+    <!-- Appointments Section -->
+    <div class="sidebar-section">
+        <h4>Appointments</h4>
+        <ul>
+            <li><a href="#">Overview</a></li>
+            <li><a href="#">Book Appointment</a></li>
+            <li><a href="#">My Appointments</a></li>
+            {% if request.user.is_staff %}
+            <li><a href="#">All Appointments</a></li>
+            <li><a href="#">Appointment Calendar</a></li>
+            {% endif %}
+        </ul>
+    </div>
+
+    <!-- Services Section -->
+    <div class="sidebar-section">
+        <h4>Services</h4>
+        <ul>
+            <li><a href="#">Medical Consultation</a></li>
+            <li><a href="#">Emergency Response</a></li>
+            <li><a href="#">Home Care</a></li>
+            <li><a href="#">Mental Health</a></li>
+        </ul>
+    </div>
+
+    <!-- Patients Section (Admin only) -->
+    {% if request.user.is_staff %}
+    <div class="sidebar-section">
+        <h4>Patients</h4>
+        <ul>
+            <li><a href="#">All Patients</a></li>
+            <li><a href="#">Patient Records</a></li>
+            <li><a href="#">Feedback / Reviews</a></li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Reports Section -->
+    <div class="sidebar-section">
+        <h4>Reports</h4>
+        <ul>
+            <li><a href="#">Daily Appointments</a></li>
+            <li><a href="#">Weekly Appointments</a></li>
+            <li><a href="#">Revenue / Billing</a></li>
+        </ul>
+    </div>
+
+    <!-- Settings Section -->
+    <div class="sidebar-section">
+        <h4>Settings</h4>
+        <ul>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Account Settings</a></li>
+            <li><a href="#">Notifications</a></li>
+            <li><a href="{% url 'logout' %}">Logout</a></li>
+        </ul>
+    </div>
+</aside>
+
+
+    <!-- Main content -->
+    <section class="main-content">
+
+        <h2>Welcome, {{ request.user.first_name|default:request.user.username }}</h2>
+
+        <!-- KPI Summary Cards -->
+        <div class="summary-cards">
+            <div class="summary-card">
+                <h4>Total Appointments</h4>
+                <p>24</p>
+            </div>
+            <div class="summary-card">
+                <h4>Pending</h4>
+                <p>6</p>
+            </div>
+            <div class="summary-card">
+                <h4>Completed</h4>
+                <p>15</p>
+            </div>
+            <div class="summary-card">
+                <h4>Cancelled</h4>
+                <p>3</p>
+            </div>
+        </div>
+
+        <!-- Services -->
+        <div class="services">
+            <h3>Available Services</h3>
+            <div class="service-grid">
+                <div class="service-card">
+                    <h4>Medical Consultation</h4>
+                    <p>General medical checkups and consultations.</p>
+                    <button>Book</button>
+                </div>
+                <div class="service-card">
+                    <h4>Emergency Response</h4>
+                    <p>Immediate emergency medical assistance.</p>
+                    <button>Book</button>
+                </div>
+                <div class="service-card">
+                    <h4>Home Care</h4>
+                    <p>Medical care provided at home.</p>
+                    <button>Book</button>
+                </div>
+                <div class="service-card">
+                    <h4>Mental Health Session</h4>
+                    <p>Professional counseling and therapy.</p>
+                    <button>Book</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments Table -->
+        <div class="apppointments">
+            <h3>Your Appointments</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Status</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="5" style="text-align:center;">
+                            Appointments will load here
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </section>
+</div>
+{% endblock %}

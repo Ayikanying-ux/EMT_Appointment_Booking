@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<h2>Create an account</h2>
+
+<form id="registerForm">
+    <input type="text" id="full_name" placeholder="Full Name" required>
+    <input type="email" name="" id="email" placeholder="Email" required>
+    <input type="password" name="" id="password" placeholder="Password" required>
+    <button type="submit">Register</button>
+</form>
+
+<p id="message"></p>
+
+<p>
+    Already have an account?
+    <a href="{% url 'login_page' %}">Login</a>
+</p>
+
+{% endblock %}
+<script src="{% static 'core/js/register.js' %}"></script>
