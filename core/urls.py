@@ -13,6 +13,6 @@ urlpatterns = [
 
     # Appointments
     path('appointments/', views.list_appointments, name='list_appointments'), # Admin: all appointments, User: own
-    path('appointments/create/', views.create_appointment, name='create_appointment'), # User creates
+    path('create-appointment/', views.create_appointment, name='create_appointment'), # User creates
     path('appointments/<int:appointment_id>/update/', views.update_appointment, name='update_appointment'), # Admin updates
 ]

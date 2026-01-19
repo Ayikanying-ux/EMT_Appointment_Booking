@@ -7,69 +7,68 @@
 
     <!-- Sidebar -->
     <aside class="sidebar">
-    <div class="sidebar-header">
-        <h3>Hospital Dashboard</h3>
-    </div>
+        <div class="sidebar-header">
+            <h3>Hospital Dashboard</h3>
+        </div>
 
-    <!-- Appointments Section -->
-    <div class="sidebar-section">
-        <h4>Appointments</h4>
-        <ul>
-            <li><a href="#">Overview</a></li>
-            <li><a href="#">Book Appointment</a></li>
-            <li><a href="#">My Appointments</a></li>
-            {% if request.user.is_staff %}
-            <li><a href="#">All Appointments</a></li>
-            <li><a href="#">Appointment Calendar</a></li>
-            {% endif %}
-        </ul>
-    </div>
+        <!-- Appointments Section -->
+        <div class="sidebar-section">
+            <h4>Appointments</h4>
+            <ul>
+                <li><a href="#">Overview</a></li>
+                <li><a href="#">Book Appointment</a></li>
+                <li><a href="#">My Appointments</a></li>
+                {% if request.user.is_staff %}
+                <li><a href="#">All Appointments</a></li>
+                <li><a href="#">Appointment Calendar</a></li>
+                {% endif %}
+            </ul>
+        </div>
 
-    <!-- Services Section -->
-    <div class="sidebar-section">
-        <h4>Services</h4>
-        <ul>
-            <li><a href="#">Medical Consultation</a></li>
-            <li><a href="#">Emergency Response</a></li>
-            <li><a href="#">Home Care</a></li>
-            <li><a href="#">Mental Health</a></li>
-        </ul>
-    </div>
+        <!-- Services Section -->
+        <div class="sidebar-section">
+            <h4>Services</h4>
+            <ul>
+                <li><a href="#">Medical Consultation</a></li>
+                <li><a href="#">Emergency Response</a></li>
+                <li><a href="#">Home Care</a></li>
+                <li><a href="#">Mental Health</a></li>
+            </ul>
+        </div>
 
-    <!-- Patients Section (Admin only) -->
-    {% if request.user.is_staff %}
-    <div class="sidebar-section">
-        <h4>Patients</h4>
-        <ul>
-            <li><a href="#">All Patients</a></li>
-            <li><a href="#">Patient Records</a></li>
-            <li><a href="#">Feedback / Reviews</a></li>
-        </ul>
-    </div>
-    {% endif %}
+        <!-- Patients Section (Admin only) -->
+        {% if request.user.is_staff %}
+        <div class="sidebar-section">
+            <h4>Patients</h4>
+            <ul>
+                <li><a href="#">All Patients</a></li>
+                <li><a href="#">Patient Records</a></li>
+                <li><a href="#">Feedback / Reviews</a></li>
+            </ul>
+        </div>
+        {% endif %}
 
-    <!-- Reports Section -->
-    <div class="sidebar-section">
-        <h4>Reports</h4>
-        <ul>
-            <li><a href="#">Daily Appointments</a></li>
-            <li><a href="#">Weekly Appointments</a></li>
-            <li><a href="#">Revenue / Billing</a></li>
-        </ul>
-    </div>
+        <!-- Reports Section -->
+        <div class="sidebar-section">
+            <h4>Reports</h4>
+            <ul>
+                <li><a href="#">Daily Appointments</a></li>
+                <li><a href="#">Weekly Appointments</a></li>
+                <li><a href="#">Revenue / Billing</a></li>
+            </ul>
+        </div>
 
-    <!-- Settings Section -->
-    <div class="sidebar-section">
-        <h4>Settings</h4>
-        <ul>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Account Settings</a></li>
-            <li><a href="#">Notifications</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
-        </ul>
-    </div>
-</aside>
-
+        <!-- Settings Section -->
+        <div class="sidebar-section">
+            <h4>Settings</h4>
+            <ul>
+                <li><a href="#">Profile</a></li>
+                <li><a href="#">Account Settings</a></li>
+                <li><a href="#">Notifications</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </div>
+    </aside>
 
     <!-- Main content -->
     <section class="main-content">
@@ -99,27 +98,48 @@
         <!-- Services -->
         <div class="services">
             <h3>Available Services</h3>
+
             <div class="service-grid">
-                <div class="service-card">
+
+                <div class="service-card" data-service="Medical Consultation">
                     <h4>Medical Consultation</h4>
                     <p>General medical checkups and consultations.</p>
-                    <button>Book</button>
+                    <button class="book-btn">Book</button>
                 </div>
-                <div class="service-card">
+
+                <div class="service-card" data-service="Emergency Response">
                     <h4>Emergency Response</h4>
                     <p>Immediate emergency medical assistance.</p>
-                    <button>Book</button>
+                    <button class="book-btn">Book</button>
                 </div>
-                <div class="service-card">
+
+                <div class="service-card" data-service="Home Care">
                     <h4>Home Care</h4>
                     <p>Medical care provided at home.</p>
-                    <button>Book</button>
+                    <button class="book-btn">Book</button>
                 </div>
-                <div class="service-card">
+
+                <div class="service-card" data-service="Mental Health Session">
                     <h4>Mental Health Session</h4>
                     <p>Professional counseling and therapy.</p>
-                    <button>Book</button>
+                    <button class="book-btn">Book</button>
                 </div>
+
+            </div>
+        </div>
+
+        <!-- Appointment Booking Form -->
+        <div class="appointment-form" id="appointmentForm" style="display:none;">
+            <h3>Book Appointment</h3>
+
+            <input type="text" id="serviceType" readonly placeholder="Service Type">
+            <input type="date" id="appointmentDate" required>
+            <input type="time" id="appointmentTime" required>
+            <textarea id="notes" placeholder="Notes (optional)"></textarea>
+
+            <div style="display:flex; gap: 0.5rem;">
+                <button id="submitBooking">Submit</button>
+                <button id="cancelBooking" type="button">Cancel</button>
             </div>
         </div>
 
@@ -148,4 +168,6 @@
 
     </section>
 </div>
+
+<script src="{% static 'js/appointments.js' %}"></script>
 {% endblock %}

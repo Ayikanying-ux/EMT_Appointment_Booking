@@ -112,69 +112,86 @@ def is_admin(user):
     return user.is_staff
 
 
-@csrf_exempt
-@login_required
 @require_POST
+@login_required  # Ensures user is logged in
 def create_appointment(request):
     try:
         data = json.loads(request.body)
 
         service_type = data.get('service_type')
-        appointment_date = data.get('appointment_date') # format: YYYY-MM-DD
-        appointment_time = data.get('appointment_time') # format: HH:MM
+        appointment_date = data.get('appointment_date')  # YYYY-MM-DD
+        appointment_time = data.get('appointment_time')  # HH:MM
+        notes = data.get('notes', '')  # Optional
 
+        # Validate required fields
         if not service_type or not appointment_date or not appointment_time:
-            return JsonResponse({'error': 'All fields are required'}, status = 400)
+            return JsonResponse({'error': 'Service, date, and time are required'}, status=400)
         
+        # Parse date & time
         try:
             appointment_date_obj = datetime.strptime(appointment_date, '%Y-%m-%d').date()
             appointment_time_obj = datetime.strptime(appointment_time, '%H:%M').time()
-
         except ValueError:
-            return JsonResponse({'error': 'Invalid date or time format'}, status = 400)
-        
+            return JsonResponse({'error': 'Invalid date or time format'}, status=400)
+
+        # Optional: prevent past appointments
+        from datetime import date
+        if appointment_date_obj < date.today():
+            return JsonResponse({'error': 'Appointment cannot be in the past'}, status=400)
+
+        # Create appointment
         appointment = Appointment.objects.create(
-            user = request.user,
-            service_type = service_type,
-            appointment_date = appointment_date_obj,
-            appointment_time = appointment_time_obj
+            user=request.user,
+            service_type=service_type,
+            appointment_date=appointment_date_obj,
+            appointment_time=appointment_time_obj,
+            notes=notes
         )
 
         return JsonResponse({
             'message': 'Appointment created successfully',
             'appointment_id': appointment.id
         }, status=201)
-    
+
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status = 500)
+        return JsonResponse({'error': str(e)}, status=500)
     
+
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Appointment
 
 @login_required
 def list_appointments(request):
     try:
+        # Get appointments
         if request.user.is_staff:
             appointments = Appointment.objects.all()
-
         else:
             appointments = Appointment.objects.filter(user=request.user)
 
-            appointments_list = [
-                {
-                    'id': appt.id,
-                    'user': appt.user.username,
-                    'service_type': appt.service_type,
-                    'appointment_data': str(appt.appointment_date),
-                    'appointment_time': str(appt.appointment_time),
-                    'status': appt.status,
-                    'notes': appt.notes,
-                }
-                for appt in appointments
-            ]
+        # Convert to JSON-friendly list
+        appointments_list = [
+            {
+                'id': appt.id,
+                'user': appt.user.username,
+                'service_type': appt.service_type,
+                'appointment_date': appt.appointment_date.strftime('%Y-%m-%d'),
+                'appointment_time': appt.appointment_time.strftime('%H:%M'),
+                'status': appt.status,
+                'notes': appt.notes or '',
+            }
+            for appt in appointments
+        ]
 
-        return JsonResponse({'appointments': appointments_list}, status = 200)
-    
+        return JsonResponse({'appointments': appointments_list}, status=200)
+
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status = 500)
+        return JsonResponse({'error': str(e)}, status=500)
+
     
 
 @csrf_exempt
