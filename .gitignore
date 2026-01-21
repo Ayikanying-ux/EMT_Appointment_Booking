@@ -1,0 +1,66 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.sqlite3
+
+# Ignore migrations if you want, optional
+#*/migrations/*
+# except __init__.py
+#*/migrations/__init__.py
+
+# Environment
+.env
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Mac / Linux / Windows system files
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Static & media files
+/staticfiles/
+/media/
+
+# Coverage reports
+htmlcov/
+.coverage
+*.cover
+coverage.xml
+*.py,cover
+nosetests.xml
+pytest_cache/
+.pytest_cache/
+
+# Logs
+*.log
+
+# Celery
+celerybeat-schedule
+celerybeat.pid
+
+# Django local settings
+local_settings.py
+
+# PyCharm
+*.iml
+.idea/
+
+# VSCode
+.vscode/

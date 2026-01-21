@@ -95,6 +95,9 @@ def register_page(request):
 def login_page(request):
     return render(request, 'core/login.html')
 
+def admin_dashboard_page(request):
+    return render(request, 'core/admin_dashboard.html')
+
 def appointments_page(request):
     user = request.user
 

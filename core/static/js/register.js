@@ -42,3 +42,19 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+
+// Display field based on user role (admin/user)
+const roleSelect = document.getElementById("role");
+const adminCodeField = document.getElementById("staffIDField");
+
+roleSelect.addEventListener("change", function () {
+    if (this.value === "staff") {
+        adminCodeField.style.display = "block";
+    } else {
+        adminCodeField.style.display = "none";
+    }
+});
+
+if (roleSelect.value === "staff") {
+    adminCodeField.style.display = "block";
+}
