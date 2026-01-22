@@ -1,26 +1,45 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("registerForm");
     const message = document.getElementById("message");
+    const roleSelect = document.getElementById("role");
+    const specialityWrapper = document.getElementById("specialityField");
+    const hospitalWrapper = document.getElementById("hospitalIdField");
 
-    if (!form || !message) {
-        console.error("Form or message element not found!");
-        return;
+    if (!form || !message || !roleSelect) return;
+
+    // Toggle doctor-only fields
+    function toggleDoctorFields() {
+        if (roleSelect.value === "doctor") {
+            specialityWrapper.style.display = "block";
+            hospitalWrapper.style.display = "block";
+        } else {
+            specialityWrapper.style.display = "none";
+            hospitalWrapper.style.display = "none";
+        }
     }
 
-    form.addEventListener('submit', async function (e) {
+    toggleDoctorFields(); // Initial check
+    roleSelect.addEventListener("change", toggleDoctorFields);
+
+    // Handle form submit
+    form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        const full_name = document.getElementById("full_name").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        const payload = {
+            full_name: document.getElementById("full_name").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+            role: roleSelect.value,
+            phone_number: document.getElementById("phone_number").value,
+            speciality: document.getElementById("speciality")?.value || "",
+            hospital_id: document.getElementById("hospital_id")?.value || ""
+        };
 
         try {
-            const response = await fetch('/api/register/', {
+            const response = await fetch("/api/register/", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ full_name, email, password })
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
             });
 
             const data = await response.json();
@@ -33,28 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 }, 1500);
             } else {
                 message.style.color = "red";
-                message.innerText = data.error || "Something went wrong";
+                message.innerText = data.error;
             }
         } catch (err) {
             message.style.color = "red";
-            message.innerText = "An error occurred.";
+            message.innerText = "Something went wrong";
             console.error(err);
         }
     });
 });
-
-// Display field based on user role (admin/user)
-const roleSelect = document.getElementById("role");
-const adminCodeField = document.getElementById("staffIDField");
-
-roleSelect.addEventListener("change", function () {
-    if (this.value === "staff") {
-        adminCodeField.style.display = "block";
-    } else {
-        adminCodeField.style.display = "none";
-    }
-});
-
-if (roleSelect.value === "staff") {
-    adminCodeField.style.display = "block";
-}

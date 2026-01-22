@@ -1,3 +1,4 @@
+import uuid
 from django.shortcuts import render
 
 import json
@@ -10,6 +11,7 @@ from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.utils.decorators import method_decorator
 from . models import Appointment
+from . models import Profile
 from datetime import datetime
 # Create your views here.
 
@@ -22,6 +24,10 @@ def register_user(request):
         full_name = data.get('full_name')
         email = data.get('email')
         password = data.get('password')
+        role = data.get('role', 'patient')  # Default role is 'patient'
+        phone_number = data.get('phone_number', '')
+        hospital_id = data.get('hospital_id', '')
+        speciality = data.get('speciality', '')
 
         if not full_name or not email or not password:
             return JsonResponse(
@@ -29,6 +35,12 @@ def register_user(request):
                 status=400
             )
 
+        if role == 'doctor' and (not speciality or not hospital_id):
+            return JsonResponse(
+                {'error': 'Speciality and Hospital ID are required for doctors'},
+                status=400
+            )
+        
         if User.objects.filter(username=email).exists():
             return JsonResponse(
                 {'error': 'User already exists'},
@@ -40,6 +52,18 @@ def register_user(request):
             email = email,
             password = password,
             first_name = full_name
+        )
+
+        if role == 'doctor':
+            user.is_staff = True
+            user.save()
+
+        profile = Profile.objects.create(
+            user = user,
+            role = role,
+            phone_number = phone_number,   
+            speciality = speciality if role == 'doctor' else '',
+            hospital_id = hospital_id if role == 'doctor' else ''
         )
 
         return JsonResponse(
@@ -239,5 +263,32 @@ def update_appointment(request, appointment_id):
     except Appointment.DoesNotExist:
         return JsonResponse({'error': 'Appointment not found'}, status=404)
     
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+    
+
+# Appointment payment API
+@csrf_exempt
+@login_required
+def pay_for_appointment(request, appointment_id):
+    if request.method != 'POST':
+        return JsonResponse({"error": "Invalid request method"}, status=405)
+    try:
+        data = json.loads(request.body)
+        payment_method = data.get('payment_method')
+        if payment_method not in ['MTN', 'AIRTEL']:
+            return JsonResponse({'error': 'Invalid payment method'}, status=400 )
+        appointment = Appointment.objects.get(id=appointment_id, user=request.user)
+        if appointment.status == 'PAID':
+            return JsonResponse({'error': 'Appointment already paid'}, status=400)
+        
+        appointment.status = 'PAID'
+        appointment.payment_method = payment_method
+        appointment.transaction_id = str(uuid.uuid4())
+        appointment.save()
+
+        return JsonResponse({'message': 'Payment successful', 'transaction_id': appointment.transaction_id}, status=200)
+    except Appointment.DoesNotExist:
+        return JsonResponse({'error': 'Appointment not found'}, status=404)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)

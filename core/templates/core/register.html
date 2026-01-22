@@ -8,21 +8,32 @@
 
     <form id="registerForm">
         <input type="text" id="full_name" placeholder="Full Name" required>
-        <input type="email" name="" id="email" placeholder="Email" required>
-        <input type="password" name="" id="password" placeholder="Password" required>
+
+        <input type="email" id="email" placeholder="Email" required>
+
+        <input type="password" id="password" placeholder="Password" required>
 
         <!-- Role selection -->
         <select id="role" required>
             <option value="" disabled selected>Register as:</option>
             <option value="patient">Patient</option>
-            <option value="staff">Staff</option>
+            <option value="doctor">Doctor</option>
         </select>
-        <div id="staffIDField" style="display:none; margin-top:1rem;">
-            <input type="text" name="staff_id" id="staff_id" placeholder="Staff ID">
+
+        <!-- Doctor-only fields -->
+        <div id="specialityField" style="display:none;">
+            <input type="text" id="speciality" placeholder="Speciality">
         </div>
-        <input type="text" name="phone_number" id="phone_number" placeholder="Phone Number">
+
+        <div id="hospitalIdField" style="display:none;">
+            <input type="text" id="hospital_id" placeholder="Hospital ID">
+        </div>
+
+        <input type="text" id="phone_number" placeholder="Phone Number">
+
         <button type="submit">Register</button>
     </form>
+
 
     <p id="message"></p>
 

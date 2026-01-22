@@ -22,6 +22,7 @@ class Appointment(models.Model):
 
     STATUS_CHOICES = [
         ('PENDING', 'Pending'),
+        ('PAID', 'Paid'),
         ('APPROVED', 'Approved'),
         ('REJECTED', 'Rejected'),
         ('COMPLETED', 'Completed'),
@@ -45,3 +46,21 @@ class Appointment(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.service_type} ({self.status})"
+    
+
+class Payment(models.Model):
+    PAYMENT_METHODS = [
+        ('MTN', 'MTN Mobile Money'),
+        ('AIRTEL', 'Airtel Money'),
+    ]
+
+    STATUS_CHOICES = [
+        ('PENDING', 'Pending'),
+        ('COMPLETED', 'Completed'),
+        ('FAILED', 'Failed'),
+    ]
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
+    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE, related_name='payments')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='PENDING')
+    created_at = models.DateTimeField(auto_now_add=True)
