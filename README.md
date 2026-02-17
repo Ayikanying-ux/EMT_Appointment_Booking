@@ -1,13 +1,13 @@
-# 🗓️ Online Appointment & Service Management System
+# Online Appointment & Service Management System
 
-## 📌 Project Overview
+## Project Overview
 This project is a **full-stack web application** developed as part of a **Business Technology Apprenticeship** at **E&M Technology House**.
 
 The system solves the problem of **manual appointment booking and long service queues** by allowing users to book appointments online and enabling administrators to manage and track service delivery efficiently.
 
 ---
 
-## 🎯 Problem Statement
+## Problem Statement
 Many organizations such as clinics, banks, and service centers rely on manual appointment processes, which lead to:
 - Long queues
 - Poor appointment tracking
@@ -17,15 +17,15 @@ This system provides a **digital solution** for booking, approving, and managing
 
 ---
 
-## ✅ Features
+## Features
 
-### 👤 User Features
+### User Features
 - User registration and login
 - Book an appointment online
 - View appointment status (Pending, Approved, Rejected, Completed)
 - Logout securely
 
-### 👨‍💼 Admin Features
+### Admin Features
 - Admin login
 - View all appointments
 - Approve, reject, or complete appointments
@@ -34,7 +34,7 @@ This system provides a **digital solution** for booking, approving, and managing
 
 ---
 
-## 🧱 System Architecture
+## System Architecture
 The system follows a standard **frontend-backend architecture**:
 
 - **Frontend**: HTML, CSS, JavaScript (AJAX for dynamic interactions)
@@ -45,7 +45,7 @@ Users interact via the web interface, which communicates with Django views that 
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 
 | Layer | Technology |
 |------|------------|
@@ -57,7 +57,7 @@ Users interact via the web interface, which communicates with Django views that 
 
 ---
 
-## 🗄️ Database Design
+## Database Design
 
 ### Users
 - Uses Django’s built-in `User` model for secure authentication.
@@ -69,7 +69,7 @@ Users interact via the web interface, which communicates with Django views that 
 
 ---
 
-## 🔐 Security Considerations
+## Security Considerations
 - Passwords are securely hashed by Django
 - Role-based access control (User vs Admin)
 - Session-based authentication
@@ -77,9 +77,9 @@ Users interact via the web interface, which communicates with Django views that 
 
 ---
 
-## 🚀 How to Run the Project
+## How to Run the Project
 
-### 1️⃣ Clone or Download the Project
+### Clone or Download the Project
 ```bash
 git clone <repository-url>
 cd appointment_system
